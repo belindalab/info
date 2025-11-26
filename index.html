@@ -13,11 +13,13 @@
     
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+      background: #ffffff;
       min-height: 100vh;
-      padding: 40px 20px;
+      padding: 0;
       color: #1a1a1a;
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     
     /* Прелоадер */
@@ -70,47 +72,40 @@
     }
     
     h1 {
-      font-size: 36px;
+      font-size: 28px;
       font-weight: 700;
-      color: #1a1a1a;
-      margin-bottom: 32px;
-      text-align: center;
-      letter-spacing: -0.5px;
+      color: #424A52;
+      margin: 0 0 24px 0;
+      text-align: left;
+      letter-spacing: -0.3px;
       animation: fadeInDown 0.6s ease;
+      padding: 20px 20px 0 20px;
     }
     
     h2 {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 600;
-      color: #1a1a1a;
-      margin-bottom: 16px;
+      color: #424A52;
+      margin: 0 0 20px 0;
       display: flex;
       align-items: center;
     }
     
     h2::before {
-      content: '';
-      width: 4px;
-      height: 24px;
-      background: #424A52;
-      margin-right: 12px;
-      border-radius: 2px;
+      display: none;
     }
     
     .card {
-      background: #fff;
-      padding: 28px;
-      margin-bottom: 24px;
-      border-radius: 16px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: transparent;
+      padding: 0 20px;
+      margin-bottom: 0;
       transition: all 0.3s ease;
       animation: fadeInUp 0.5s ease;
     }
     
-    .card:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-      transform: translateY(-2px);
+    .card:last-child {
+      margin-bottom: 0;
+      padding-bottom: 40px;
     }
     
     label {
@@ -127,8 +122,8 @@
       width: 100%;
       padding: 14px 16px;
       font-size: 16px;
-      border: 2px solid #e5e7eb;
-      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
       background: #fff;
       color: #1a1a1a;
       font-family: inherit;
@@ -138,8 +133,8 @@
     
     input[type="text"]:focus {
       outline: none;
-      border-color: #424A52;
-      box-shadow: 0 0 0 3px rgba(66, 74, 82, 0.1);
+      border-color: #DE3B21;
+      box-shadow: 0 0 0 3px rgba(222, 59, 33, 0.1);
     }
     
     input[type="text"]::placeholder {
@@ -151,8 +146,8 @@
       padding: 14px 16px;
       font-size: 16px;
       font-weight: 500;
-      border: 2px solid #e5e7eb;
-      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
       background: #fff;
       color: #1a1a1a;
       cursor: pointer;
@@ -161,13 +156,13 @@
     }
     
     select:hover {
-      border-color: #424A52;
+      border-color: #DE3B21;
     }
     
     select:focus {
       outline: none;
-      border-color: #424A52;
-      box-shadow: 0 0 0 3px rgba(66, 74, 82, 0.1);
+      border-color: #DE3B21;
+      box-shadow: 0 0 0 3px rgba(222, 59, 33, 0.1);
     }
     
     /* Кастомный выпадающий список */
@@ -186,8 +181,8 @@
       padding: 14px 16px;
       font-size: 16px;
       font-weight: 500;
-      border: 2px solid #e5e7eb;
-      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
       background: #fff;
       color: #1a1a1a;
       cursor: pointer;
@@ -204,18 +199,18 @@
       height: 0;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-top: 6px solid #424A52;
+      border-top: 6px solid #DE3B21;
       margin-left: 10px;
       transition: transform 0.3s ease;
     }
     
     .select-selected.active::after {
       transform: rotate(180deg);
-      border-top-color: #424A52;
+      border-top-color: #DE3B21;
     }
     
     .select-selected:hover {
-      border-color: #424A52;
+      border-color: #DE3B21;
     }
     
     .select-items {
@@ -224,9 +219,9 @@
       left: 0;
       right: 0;
       background: #fff;
-      border: 2px solid #424A52;
-      border-radius: 10px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      border: 1px solid #DE3B21;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
       z-index: 1000;
       max-height: 350px;
       overflow: hidden;
@@ -248,8 +243,8 @@
       width: calc(100% - 24px) !important;
       margin: 12px 12px 8px 12px !important;
       padding: 10px 12px !important;
-      border: 2px solid #e5e7eb !important;
-      border-radius: 8px !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 6px !important;
       font-size: 15px !important;
       position: sticky;
       top: 0;
@@ -258,9 +253,9 @@
     }
     
     .search-in-dropdown:focus {
-      border-color: #424A52 !important;
+      border-color: #DE3B21 !important;
       outline: none !important;
-      box-shadow: 0 0 0 3px rgba(66, 74, 82, 0.1) !important;
+      box-shadow: 0 0 0 3px rgba(222, 59, 33, 0.1) !important;
     }
     
     #productList {
@@ -279,22 +274,22 @@
     }
     
     .product-item:hover {
-      background: #e0f7ff;
-      color: #424A52;
+      background: #fff5f5;
+      color: #DE3B21;
       font-weight: 500;
     }
     
     .product-item:active {
-      background: #424A52;
+      background: #DE3B21;
       color: #fff;
     }
     
     textarea {
       width: 100%;
-      padding: 14px;
+      padding: 14px 16px;
       font-size: 15px;
-      border: 2px solid #e5e7eb;
-      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
       margin-top: 12px;
       font-family: inherit;
       resize: vertical;
@@ -304,8 +299,8 @@
     
     textarea:focus {
       outline: none;
-      border-color: #424A52;
-      box-shadow: 0 0 0 3px rgba(66, 74, 82, 0.1);
+      border-color: #DE3B21;
+      box-shadow: 0 0 0 3px rgba(222, 59, 33, 0.1);
     }
     
     textarea::placeholder {
@@ -313,28 +308,28 @@
     }
     
     button {
-      padding: 14px 24px;
+      padding: 14px 28px;
       margin-top: 12px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       background: #DE3B21;
       color: #fff;
       cursor: pointer;
       font-size: 16px;
       font-weight: 600;
       font-family: inherit;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(222, 59, 33, 0.3);
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 8px rgba(222, 59, 33, 0.25);
+      width: 100%;
     }
     
     button:hover {
       background: #c5341d;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(222, 59, 33, 0.4);
+      box-shadow: 0 4px 12px rgba(222, 59, 33, 0.35);
     }
     
     button:active {
-      transform: translateY(0);
+      transform: scale(0.98);
     }
     
     button:disabled {
@@ -346,48 +341,49 @@
     
     .answer {
       margin-top: 16px;
-      background: linear-gradient(135deg, #e0f7ff 0%, #f0f9ff 100%);
+      background: #f8f9fa;
       padding: 16px;
-      border-radius: 10px;
-      border: 2px solid #424A52;
+      border-radius: 8px;
+      border-left: 3px solid #DE3B21;
       animation: slideIn 0.4s ease;
       white-space: pre-wrap;
-      line-height: 1.5;
-      color: #1a1a1a;
+      line-height: 1.7;
+      color: #2d3748;
+      font-size: 15px;
     }
     
     .error {
       margin-top: 16px;
-      background: linear-gradient(135deg, #ffe5e5 0%, #fff0f0 100%);
+      background: #fff5f5;
       padding: 16px;
-      border-radius: 10px;
-      border: 2px solid #DE3B21;
+      border-radius: 8px;
+      border-left: 3px solid #DE3B21;
       color: #DE3B21;
       font-weight: 500;
+      font-size: 14px;
       animation: shake 0.5s ease;
     }
     
     /* Стили для информации о продукте */
     .product-image {
       width: 100%;
-      max-width: 300px;
+      max-width: 100%;
       height: auto;
-      margin-bottom: 24px;
+      margin: 0 0 32px 0;
       animation: fadeIn 0.5s ease;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
-      background: transparent;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     }
     
     .product-video {
       width: 100%;
       height: auto;
-      margin-bottom: 24px;
+      margin: 0 0 32px 0;
       animation: fadeIn 0.5s ease;
       display: block;
-      border-radius: 10px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       overflow: hidden;
     }
     
@@ -447,18 +443,10 @@
     
     /* Стили для разделов */
     .info-section {
-      margin-bottom: 20px;
-      border-radius: 12px;
-      padding: 24px;
+      margin-bottom: 40px;
+      padding: 0;
       animation: fadeInUp 0.4s ease;
-      background: #fff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s ease;
-    }
-    
-    .info-section:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transform: translateY(-1px);
+      background: transparent;
     }
     
     .info-section:last-child {
@@ -473,65 +461,71 @@
     .section-special,
     .section-additional,
     .section-media {
-      background: #fff;
+      background: transparent;
     }
     
     .section-title {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 700;
-      color: #424A52;
-      margin-bottom: 16px;
+      color: #DE3B21;
+      margin: 0 0 16px 0;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      display: flex;
-      align-items: center;
+      letter-spacing: 1.2px;
+      display: block;
+      position: relative;
+      padding-bottom: 8px;
     }
     
-    .section-title::before {
+    .section-title::after {
       content: '';
-      width: 4px;
-      height: 20px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
       background: #DE3B21;
-      margin-right: 12px;
       border-radius: 2px;
     }
     
+    .info-section:first-child .section-title {
+      margin-top: 0;
+    }
+    
     #info .info-item {
-      margin-bottom: 16px;
+      margin-bottom: 24px;
       animation: fadeIn 0.3s ease;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #f0f0f0;
     }
     
     #info .info-item:last-child {
       margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
     }
     
     #info .info-label {
       color: #424A52;
       font-weight: 600;
-      font-size: 14px;
-      text-transform: none;
-      letter-spacing: 0.2px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
+      display: block;
     }
     
     #info .info-label::before {
-      content: '';
-      width: 3px;
-      height: 16px;
-      background: #DE3B21;
-      margin-right: 10px;
-      border-radius: 2px;
+      display: none;
     }
     
     #info .info-value {
       font-size: 15px;
-      color: #374151;
-      line-height: 1.7;
-      padding-left: 13px;
+      color: #2d3748;
+      line-height: 1.75;
+      padding-left: 0;
       white-space: pre-wrap;
       word-wrap: break-word;
+      font-weight: 400;
     }
     
     #info .info-value strong,
@@ -558,13 +552,15 @@
     
     /* Стили для истории */
     #history p {
-      margin-bottom: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #f3f4f6;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f0f0f0;
       animation: fadeIn 0.3s ease;
       white-space: pre-wrap;
       word-wrap: break-word;
-      line-height: 1.5;
+      line-height: 1.7;
+      font-size: 14px;
+      color: #2d3748;
     }
     
     #history p:last-child {
@@ -574,13 +570,13 @@
     }
     
     #history b {
-      color: #424A52;
+      color: #DE3B21;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       display: inline-block;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
     
     #history strong {
@@ -714,10 +710,11 @@
     
     /* Контейнер */
     .container {
-      max-width: 900px;
-      margin: 0 auto;
+      max-width: 100%;
+      margin: 0;
       opacity: 0;
       transition: opacity 0.5s ease;
+      background: #ffffff;
     }
     
     .container.loaded {
@@ -732,28 +729,70 @@
     /* Адаптивность для мобильных */
     @media (max-width: 768px) {
       body {
-        padding: 16px;
-        font-size: 16px;
+        padding: 0;
+        font-size: 15px;
       }
       
       h1 {
-        font-size: 26px;
+        font-size: 24px;
         margin-bottom: 20px;
+        padding: 16px 16px 0 16px;
       }
       
       h2 {
-        font-size: 20px;
-      }
-      
-      h2::before {
-        width: 3px;
-        height: 20px;
+        font-size: 17px;
+        margin-bottom: 16px;
       }
       
       .card {
-        padding: 20px;
-        margin-bottom: 16px;
-        border-radius: 12px;
+        padding: 0 16px;
+        margin-bottom: 0;
+      }
+      
+      .card:last-child {
+        padding-bottom: 32px;
+      }
+      
+      .info-section {
+        margin-bottom: 32px;
+        padding: 0;
+      }
+      
+      .section-title {
+        font-size: 13px;
+        margin-bottom: 14px;
+        letter-spacing: 1px;
+      }
+      
+      .section-title::after {
+        width: 35px;
+        height: 2px;
+      }
+      
+      #info .info-item {
+        margin-bottom: 20px;
+        padding-bottom: 16px;
+      }
+      
+      #info .info-label {
+        font-size: 12px;
+        margin-bottom: 6px;
+        letter-spacing: 0.4px;
+      }
+      
+      #info .info-value {
+        font-size: 14px;
+        line-height: 1.7;
+      }
+      
+      .product-image {
+        margin-bottom: 24px;
+        border-radius: 0;
+      }
+      
+      .product-video {
+        margin-bottom: 24px;
+        border-radius: 0;
       }
       
       .container {
@@ -800,16 +839,36 @@
     
     /* Для очень маленьких экранов */
     @media (max-width: 375px) {
-      body {
-        padding: 12px;
-      }
-      
       h1 {
-        font-size: 24px;
+        font-size: 22px;
+        padding: 12px 12px 0 12px;
       }
       
       .card {
-        padding: 16px;
+        padding: 0 12px;
+      }
+      
+      .info-section {
+        margin-bottom: 28px;
+      }
+      
+      .section-title {
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
+      
+      #info .info-item {
+        margin-bottom: 18px;
+        padding-bottom: 14px;
+      }
+      
+      #info .info-label {
+        font-size: 11px;
+      }
+      
+      #info .info-value {
+        font-size: 13px;
+        line-height: 1.65;
       }
     }
   </style>
