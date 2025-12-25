@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Belinda AI Catalog</title>
   
+  <!-- Telegram WebApp Script -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -118,6 +121,17 @@
 
     /* --- Info Styles --- */
     .product-image { width: 100%; border-radius: 12px; margin-bottom: 20px; }
+    .copy-all-btn {
+      width: 100%; padding: 10px 16px; margin-bottom: 20px;
+      background: #F9FAFB; border: 1px solid #E5E7EB; border-radius: 10px;
+      color: var(--text-sec); font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; font-family: inherit;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .copy-all-btn:hover { background: #F3F4F6; border-color: #D1D5DB; color: var(--text-main); }
+    .copy-all-btn:active { transform: scale(0.98); background: #E5E7EB; }
+    .copy-all-btn svg { width: 16px; height: 16px; }
+    .copy-all-btn.copied { background: rgba(34, 197, 94, 0.1); border-color: #22c55e; color: #22c55e; }
     .info-group { margin-bottom: 24px; }
     .group-title {
       font-size: 13px; font-weight: 700; color: var(--primary);
@@ -125,9 +139,19 @@
       margin-bottom: 12px; border-bottom: 2px solid rgba(222, 59, 33, 0.2);
       padding-bottom: 4px; display: inline-block;
     }
-    .field { margin-bottom: 12px; }
-    .field-label { font-size: 11px; color: var(--text-sec); font-weight: 500; text-transform: uppercase; }
+    .field { margin-bottom: 12px; position: relative; }
+    .field-label { font-size: 11px; color: var(--text-sec); font-weight: 500; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; }
     .field-value { font-size: 15px; color: var(--text-main); white-space: pre-wrap; margin-top: 2px;}
+    .copy-btn {
+      width: 28px; height: 28px; border-radius: 6px; border: none;
+      background: rgba(222, 59, 33, 0.1); color: var(--primary);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; padding: 0; flex-shrink: 0;
+    }
+    .copy-btn:hover { background: rgba(222, 59, 33, 0.2); }
+    .copy-btn:active { transform: scale(0.95); }
+    .copy-btn svg { width: 16px; height: 16px; }
+    .copy-btn.copied { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
 
     /* --- Video Player --- */
     .video-container { margin-top: 24px; }
@@ -155,6 +179,24 @@
     }
     .chat-bubble { padding: 16px; border-radius: 12px; font-size: 15px; line-height: 1.6; margin-top: 10px; }
     .chat-bubble.ai { background: #FEF2F2; border-left: 3px solid var(--primary); }
+    
+    /* --- History Copy --- */
+    .history-item {
+      margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 8px;
+      padding: 12px; border-radius: 8px; cursor: pointer;
+      transition: all 0.2s; position: relative;
+    }
+    .history-item:hover { background: #FEF2F2; border-color: rgba(222, 59, 33, 0.2); }
+    .history-item:active { transform: scale(0.98); }
+    .history-item.copied { background: rgba(34, 197, 94, 0.1); border-color: #22c55e; }
+    .copy-toast {
+      position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: #1F2937; color: white; padding: 12px 20px;
+      border-radius: 8px; font-size: 14px; z-index: 10000;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .copy-toast.show { opacity: 1; }
 
     /* --- Preloader --- */
     #preloader {
@@ -247,6 +289,8 @@
 
   </div>
 
+  <div class="copy-toast" id="copyToast">Скопировано!</div>
+
   <div class="modal-overlay" id="modalOverlay">
     <div class="search-sheet">
       <div class="sheet-handle"></div>
@@ -259,6 +303,14 @@
   </div>
 
 <script>
+  // Telegram WebApp - автоматическое разворачивание в полноэкранный режим
+  if (window.Telegram && window.Telegram.WebApp) {
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand(); // Разворачиваем в полное окно
+    tg.enableClosingConfirmation(); // Включаем подтверждение закрытия
+  }
+
   const APP_URL = "https://script.google.com/macros/s/AKfycbyUu_4rTxy1uJdkcqVTgexLFPlWY8YUjYC_C2KOTXe0DhsK0EvnZ3bzMvU-eGdkfeWA2A/exec";
 
   let allProducts = [];
@@ -270,6 +322,60 @@
   const infoBox = document.getElementById('infoBox');
   const historyBox = document.getElementById('historyBox');
   const aiAns = document.getElementById('aiAnswer');
+  const copyToast = document.getElementById('copyToast');
+  
+  // Copy to clipboard function with HTML support
+  async function copyToClipboard(text, htmlText = null) {
+    try {
+      // Если есть HTML версия, используем ClipboardItem для сохранения форматирования
+      if(htmlText && window.ClipboardItem) {
+        try {
+          const htmlBlob = new Blob([htmlText], { type: 'text/html' });
+          const textBlob = new Blob([text], { type: 'text/plain' });
+          const clipboardItem = new ClipboardItem({
+            'text/html': htmlBlob,
+            'text/plain': textBlob
+          });
+          await navigator.clipboard.write([clipboardItem]);
+          showCopyToast();
+          return true;
+        } catch(clipError) {
+          // Если ClipboardItem не работает, пробуем обычный текст
+          await navigator.clipboard.writeText(text);
+          showCopyToast();
+          return true;
+        }
+      } else {
+        await navigator.clipboard.writeText(text);
+        showCopyToast();
+        return true;
+      }
+    } catch(e) {
+      // Fallback for older browsers
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showCopyToast();
+        return true;
+      } catch(err) {
+        return false;
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+  }
+  
+  function showCopyToast() {
+    copyToast.classList.add('show');
+    setTimeout(() => {
+      copyToast.classList.remove('show');
+    }, 2000);
+  }
   
   // API
   async function apiGet(path) {
@@ -407,6 +513,51 @@
       infoBox.appendChild(img);
     }
 
+    // 1.5. Copy All Button (после изображения или в начале, если изображения нет)
+    const fieldsToCopy = [
+      { label: 'Торговое название', key: 'Торговое название' },
+      { label: 'Состав', key: 'Состав' },
+      { label: 'Показания к применению', key: 'Показания к применению' },
+      { label: 'Способ применения и дозы', key: 'Способ применения и дозы' },
+      { label: 'Беременность и лактация', key: 'Беременность и лактация' }
+    ];
+    
+    // Проверяем, есть ли хотя бы одно поле для копирования
+    const hasCopyableData = fieldsToCopy.some(field => {
+      const realKey = Object.keys(data).find(dk => dk.toLowerCase() === field.key.toLowerCase());
+      return realKey && data[realKey];
+    });
+    
+    if(hasCopyableData) {
+      const copyAllBtn = document.createElement('button');
+      copyAllBtn.className = 'copy-all-btn';
+      copyAllBtn.innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg> Скопировать информацию для врача`;
+      copyAllBtn.onclick = async () => {
+        let textToCopy = '';
+        let htmlToCopy = '<div style="font-family: sans-serif;">';
+        fieldsToCopy.forEach(field => {
+          const realKey = Object.keys(data).find(dk => dk.toLowerCase() === field.key.toLowerCase());
+          if(realKey && data[realKey]) {
+            // Markdown версия для Telegram (используем ** для жирного)
+            textToCopy += `**${field.label}:**\n${data[realKey]}\n\n`;
+            // HTML версия с жирным форматированием
+            const escapedValue = data[realKey].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            htmlToCopy += `<p><strong>${field.label}:</strong><br>${escapedValue.replace(/\n/g, '<br>')}</p>`;
+          }
+        });
+        htmlToCopy += '</div>';
+        
+        const plainText = textToCopy.trim();
+        const htmlText = htmlToCopy;
+        
+        if(plainText && await copyToClipboard(plainText, htmlText)) {
+          copyAllBtn.classList.add('copied');
+          setTimeout(() => copyAllBtn.classList.remove('copied'), 2000);
+        }
+      };
+      infoBox.appendChild(copyAllBtn);
+    }
+
     // 2. Data Fields
     const groups = [
       { t: "О продукте", k: ['Торговое название', 'МНН', 'Группа'] },
@@ -414,13 +565,13 @@
       { t: "Применение", k: ['Показания к применению', 'Способ применения и дозы', 'Беременность и лактация'] },
       { t: "Маркетинг", k: ['Преимущества', 'Позиционирование', 'Аналоги'] }
     ];
-
+    
     groups.forEach(g => {
       let html = '';
       g.k.forEach(key => {
         const realKey = Object.keys(data).find(dk => dk.toLowerCase() === key.toLowerCase());
         if(realKey && data[realKey]) {
-           html += `<div class="field"><div class="field-label">${key}</div><div class="field-value">${data[realKey]}</div></div>`;
+          html += `<div class="field"><div class="field-label">${key}</div><div class="field-value">${data[realKey]}</div></div>`;
         }
       });
       if(html) {
@@ -451,8 +602,21 @@
     if(!data || !data.length) { historyBox.innerHTML='<span style="color:#aaa">История пуста</span>'; return; }
     data.forEach(h => {
       const d = document.createElement('div');
-      d.style.marginBottom='10px'; d.style.borderBottom='1px solid #eee'; d.style.paddingBottom='8px';
+      d.className = 'history-item';
       d.innerHTML = `<b>Вопрос:</b> ${h.question}<br><span style="color:#555"><b>Ответ:</b> ${h.answer}</span>`;
+      
+      // Добавляем обработчик копирования при клике на элемент
+      d.onclick = async () => {
+        const plainText = `**Вопрос:**\n${h.question}\n\n**Ответ:**\n${h.answer}`;
+        const escapedQuestion = h.question.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const escapedAnswer = h.answer.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        const htmlText = `<div style="font-family: sans-serif;"><p><strong>Вопрос:</strong><br>${escapedQuestion.replace(/\n/g, '<br>')}</p><p><strong>Ответ:</strong><br>${escapedAnswer.replace(/\n/g, '<br>')}</p></div>`;
+        if(await copyToClipboard(plainText, htmlText)) {
+          d.classList.add('copied');
+          setTimeout(() => d.classList.remove('copied'), 2000);
+        }
+      };
+      
       historyBox.appendChild(d);
     });
   }
